@@ -1,0 +1,183 @@
+/* ======================================== */
+/* Rising Grace Life Coach */
+/* Sprint 1 - Fully Responsive Build */
+/* ======================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
+}
+
+html, body {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    background-color: #C8A2C8; /* Lilac */
+    min-height: 100vh;
+    position: relative;
+}
+
+/* ======================================== */
+/* NAVIGATION */
+/* ======================================== */
+
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: rgba(200, 162, 200, 0.65);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 5%;
+    z-index: 1000;
+}
+
+.logo {
+    color: white;
+    font-size: clamp(16px, 2vw, 22px);
+    font-weight: bold;
+}
+
+/* Navigation Links */
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
+    transition: 0.3s ease;
+}
+
+.nav-links a:hover {
+    opacity: 0.75;
+}
+
+.login-btn {
+    border: 2px solid white;
+    border-radius: 50px;
+    padding: 6px 16px;
+}
+
+/* ======================================== */
+/* MOBILE MENU */
+/* ======================================== */
+
+.menu-toggle {
+    display: none;
+    font-size: 28px;
+    color: white;
+    cursor: pointer;
+}
+
+/* ======================================== */
+/* HOME SECTION */
+/* ======================================== */
+
+.home-container {
+    margin-top: 150px;
+    text-align: center;
+    padding: 20px;
+    min-height: calc(100vh - 150px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#welcome-message {
+    font-size: clamp(1.8rem, 5vw, 2.6rem);
+    color: white;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: riseFade 0.5s ease forwards;
+}
+
+@keyframes riseFade {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#quote-display {
+    margin-top: 25px;
+    font-size: clamp(1rem, 3vw, 1.2rem);
+    color: white;
+    min-height: 40px;
+    transition: opacity 0.5s ease;
+    padding: 0 10%;
+}
+
+/* ======================================== */
+/* Decorative Gradient Borders */
+/* ======================================== */
+
+body::before,
+body::after {
+    content: "";
+    position: fixed;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    background: linear-gradient(90deg, #a18cd1, #fbc2eb);
+    z-index: -1;
+}
+
+body::before {
+    top: 0;
+}
+
+body::after {
+    bottom: 0;
+}
+
+/* ======================================== */
+/* RESPONSIVE BREAKPOINTS */
+/* ======================================== */
+
+/* Tablets & Smaller Screens */
+@media (max-width: 768px) {
+
+    .menu-toggle {
+        display: block;
+    }
+
+    .nav-links {
+        position: absolute;
+        top: 70px;
+        right: 5%;
+        background: rgba(200, 162, 200, 0.95);
+        flex-direction: column;
+        gap: 15px;
+        padding: 20px;
+        border-radius: 10px;
+        display: none;
+        width: 200px;
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+}
+
+/* Landscape Optimization */
+@media (orientation: landscape) and (max-height: 500px) {
+
+    .home-container {
+        margin-top: 110px;
+    }
+
+    #welcome-message {
+        font-size: 1.6rem;
+    }
+}
