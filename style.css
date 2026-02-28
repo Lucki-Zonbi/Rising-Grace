@@ -181,3 +181,106 @@ body::after {
         font-size: 1.6rem;
     }
 }
+
+/* ======================================== */
+/* Sprint 2 - About Page Styles */
+/* ======================================== */
+
+.about-body {
+    background-color: #FFEAEE; /* Blossom Pink */
+}
+
+/* Container Layout */
+
+.about-container {
+    margin-top: 150px;
+    padding: 40px 5%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+/* Image Section */
+
+.about-image img {
+    width: clamp(200px, 40vw, 350px);
+    border-radius: 15px;
+    opacity: 0;
+    animation: fadeInImage 0.5s ease forwards;
+}
+
+@keyframes fadeInImage {
+    to {
+        opacity: 1;
+    }
+}
+
+/* Scrollable Bio Box */
+
+.about-content {
+    width: 100%;
+    max-width: 800px;
+}
+
+.bio-scroll {
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 20px;
+    border-radius: 12px;
+    background: rgba(200, 162, 200, 0.15);
+}
+
+/* Paragraph Fade */
+
+.fade-on-scroll {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease;
+    margin-bottom: 20px;
+    color: #a45ab5;
+    font-weight: 500;
+}
+
+.fade-on-scroll.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Return Button */
+
+.return-home {
+    margin-top: 20px;
+}
+
+.return-btn {
+    text-decoration: none;
+    background-color: #C8A2C8;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-weight: 500;
+    transition: 0.3s ease;
+}
+
+.return-btn:hover {
+    opacity: 0.8;
+}
+
+/* Responsive Adjustments */
+
+@media (min-width: 768px) {
+    .about-container {
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: center;
+    }
+
+    .about-image {
+        flex: 1;
+    }
+
+    .about-content {
+        flex: 2;
+    }
+}
