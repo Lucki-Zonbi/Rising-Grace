@@ -190,7 +190,7 @@ body::after {
     background-color: #FFEAEE; /* Blossom Pink */
 }
 
-/* Container Layout */
+/* Layout */
 
 .about-container {
     margin-top: 150px;
@@ -201,7 +201,7 @@ body::after {
     gap: 30px;
 }
 
-/* Image Section */
+/* Image Fade In */
 
 .about-image img {
     width: clamp(200px, 40vw, 350px);
@@ -216,7 +216,7 @@ body::after {
     }
 }
 
-/* Scrollable Bio Box */
+/* Scrollable Bio */
 
 .about-content {
     width: 100%;
@@ -231,7 +231,7 @@ body::after {
     background: rgba(200, 162, 200, 0.15);
 }
 
-/* Paragraph Fade */
+/* Paragraph Animation */
 
 .fade-on-scroll {
     opacity: 0;
@@ -267,7 +267,7 @@ body::after {
     opacity: 0.8;
 }
 
-/* Responsive Adjustments */
+/* Responsive Desktop Layout */
 
 @media (min-width: 768px) {
     .about-container {

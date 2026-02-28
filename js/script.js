@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 /* ======================================== */
-/* Scroll Fade Animation (About Page) */
+/* Scroll Fade Animation - About Page */
 /* ======================================== */
 
 const fadeElements = document.querySelectorAll(".fade-on-scroll");
