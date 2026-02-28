@@ -299,7 +299,7 @@ body::after {
 .hero-image {
     width: 100%;
     max-width: 900px;
-    height: auto;
+    height: 300px;
     border-radius: 20px;
 
     opacity: 0;
