@@ -483,3 +483,115 @@ textarea {
 .hidden {
     display: none;
 }
+
+/* ========================================
+   SPRINT 4 – AUTH LOGIN STYLING
+======================================== */
+
+.auth-body {
+    background: linear-gradient(135deg, #09011b, #1b0135);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.auth-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 420px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(18px);
+    border-radius: 18px;
+    padding: 35px;
+    box-shadow: 0 0 25px rgba(195, 87, 230, 0.35);
+    text-align: center;
+}
+
+.auth-card h2 {
+    color: #C357E6;
+    margin-bottom: 8px;
+}
+
+.auth-subtitle {
+    color: #ededed;
+    font-size: 0.9rem;
+    margin-bottom: 22px;
+}
+
+.form-group {
+    margin-bottom: 14px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #ededed;
+    font-size: 0.85rem;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 9px 10px;
+    border-radius: 8px;
+    border: 1px solid #C357E6;
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    font-size: 0.9rem;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #FFEAEE;
+}
+
+#loginBtn {
+    width: 100%;
+    padding: 11px;
+    border-radius: 8px;
+    border: none;
+    background: #C357E6;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 8px;
+    opacity: 0.5;
+    transition: 0.3s ease;
+}
+
+#loginBtn.enabled {
+    opacity: 1;
+}
+
+#loginBtn.enabled:hover {
+    background: #a83dd1;
+}
+
+.auth-footer {
+    margin-top: 18px;
+    font-size: 0.85rem;
+}
+
+.register-link {
+    color: #FFEAEE;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.register-link:hover {
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .auth-card {
+        padding: 25px;
+    }
+}

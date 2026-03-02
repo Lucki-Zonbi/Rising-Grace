@@ -148,3 +148,48 @@ if (form) {
         }
     });
 }
+
+/* ========================================
+   SPRINT 4 – LOGIN LOGIC
+======================================== */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const loginEmail = document.getElementById("loginEmail");
+    const loginPassword = document.getElementById("loginPassword");
+    const loginBtn = document.getElementById("loginBtn");
+    const loginForm = document.getElementById("loginForm");
+
+    if (loginEmail && loginPassword && loginBtn && loginForm) {
+
+        function validateLogin() {
+            if (
+                loginEmail.value.trim() !== "" &&
+                loginPassword.value.trim() !== ""
+            ) {
+                loginBtn.disabled = false;
+                loginBtn.classList.add("enabled");
+            } else {
+                loginBtn.disabled = true;
+                loginBtn.classList.remove("enabled");
+            }
+        }
+
+        loginEmail.addEventListener("input", validateLogin);
+        loginPassword.addEventListener("input", validateLogin);
+
+        loginForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            // Frontend authentication simulation
+            alert("Login successful (Frontend Simulation Only).");
+
+            // Temporary session storage simulation
+            sessionStorage.setItem("risingGraceUser", loginEmail.value);
+
+            // Redirect to home
+            window.location.href = "../index.html";
+        });
+    }
+
+});
