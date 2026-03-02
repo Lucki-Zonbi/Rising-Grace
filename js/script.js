@@ -63,3 +63,88 @@ function checkFade() {
 
 window.addEventListener("scroll", checkFade);
 window.addEventListener("load", checkFade);
+
+/*========================================== */
+// Contact Form Validation
+/*========================================== */
+const contactForm = document.getElementById("contactForm");
+
+if (contactForm) {
+    contactForm.addEventListener("submit", function (e) {
+
+        const email = document.getElementById("email").value;
+        const phone = document.getElementById("phone").value;
+
+        const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+        const phonePattern = /^[0-9\-\+\s\(\)]{7,15}$/;
+
+        if (!email.match(emailPattern)) {
+            alert("Please enter a valid email address.");
+            e.preventDefault();
+        }
+
+        if (!phone.match(phonePattern)) {
+            alert("Please enter a valid phone number.");
+            e.preventDefault();
+        }
+    });
+}
+
+const form = document.getElementById("contactForm");
+const sendBtn = document.getElementById("sendBtn");
+const cancelBtn = document.getElementById("cancelBtn");
+const successBox = document.getElementById("successMessage");
+const verificationNotice = document.getElementById("verificationNotice");
+
+if (form) {
+
+    const requiredFields = form.querySelectorAll("input[required], textarea[required]");
+
+    // Enable Send Button Only When All Fields Filled
+    form.addEventListener("input", () => {
+        let allFilled = true;
+
+        requiredFields.forEach(field => {
+            if (!field.value.trim()) {
+                allFilled = false;
+            }
+        });
+
+        const radioChecked = form.querySelector("input[name='contactMethod']:checked");
+
+        if (!radioChecked) allFilled = false;
+
+        sendBtn.disabled = !allFilled;
+    });
+
+    // Cancel Logic
+    cancelBtn.addEventListener("click", () => {
+        const confirmCancel = confirm("Are you sure you want to cancel?");
+        if (confirmCancel) {
+            window.location.href = "../index.html";
+        }
+    });
+
+    // Submit Logic
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const email = document.getElementById("email").value;
+
+        const verifiedEmails = JSON.parse(localStorage.getItem("verifiedEmails")) || [];
+
+        form.classList.add("hidden");
+        successBox.classList.remove("hidden");
+
+        if (!verifiedEmails.includes(email)) {
+            verificationNotice.innerText =
+                "A verification email has been sent to your email address. Please confirm to complete validation.";
+
+            verifiedEmails.push(email);
+            localStorage.setItem("verifiedEmails", JSON.stringify(verifiedEmails));
+        } else {
+            verificationNotice.innerText =
+                "Your email has already been verified. Thank you for staying connected with Rising Grace.";
+        }
+    });
+}

@@ -377,3 +377,109 @@ body::after {
     0% { opacity: 0.25; }
     100% { opacity: 0.55; }
 }
+
+/* ======================================== */
+/* Contact Page */
+/* ======================================== */
+
+.contact-body {
+    background-color: #F3E5F5; /* soft lilac */
+}
+
+body.contact-body {
+    overflow-y: auto;
+}
+
+.contact-container {
+    max-width: 600px;
+    margin: 100px auto 20px auto;  /* adds space below fixed nav */
+    padding: 10px 20px;
+}
+
+.contact-title {
+    text-align: center;
+    margin-bottom: 15px;
+    animation: fadeInHero 0.8s ease forwards;
+}
+
+.form-group {
+    margin-bottom: 10px;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 6px 8px;   /* slightly tighter */
+    border: 2px solid #C357E6;
+    border-radius: 8px;
+    font-size: 15px;    /* slightly smaller */
+    height: 38px;       /* locks height */
+    box-sizing: border-box;
+}
+
+textarea {
+    height: 70px;
+    resize: none;
+}
+
+.radio-group {
+    display: flex;
+    gap: 20px;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #C357E6;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.submit-btn:hover {
+    background-color: #A93EDC;
+}
+
+@media (max-width: 768px) {
+    .contact-container {
+        margin: 30px 15px;
+    }
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+.cancel-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #ccc;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.submit-btn:disabled {
+    background-color: #d8a7f0;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.success-box {
+    text-align: center;
+    margin-top: 40px;
+    padding: 20px;
+    border: 2px solid #C357E6;
+    border-radius: 12px;
+    background-color: #F9F1FC;
+    animation: fadeInHero 0.8s ease forwards;
+}
+
+.hidden {
+    display: none;
+}
