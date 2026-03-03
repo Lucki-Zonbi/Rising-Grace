@@ -18,6 +18,7 @@ html, body {
 body {
     background-color: #C8A2C8; /* Lilac */
     min-height: 100vh;
+    margin: 0;
     position: relative;
 }
 
@@ -390,10 +391,15 @@ body.contact-body {
     overflow-y: auto;
 }
 
+body::before,
+body::after {
+    height: 30px;
+}
+
 .contact-container {
     max-width: 600px;
-    margin: 100px auto 20px auto;  /* adds space below fixed nav */
-    padding: 10px 20px;
+    margin: 100px auto 60px auto; /* increased bottom margin */
+    padding: 10px 20px 60px 20px; /* bottom padding added */
 }
 
 .contact-title {
@@ -402,8 +408,32 @@ body.contact-body {
     animation: fadeInHero 0.8s ease forwards;
 }
 
-.form-group {
+.contact-container .form-group {
     margin-bottom: 10px;
+}
+
+.contact-container .form-group > label {
+    display: block;
+    margin-bottom: 6px;
+    color: #7b2fa6;
+    font-weight: 600;
+}
+
+.contact-container input::placeholder,
+.contact-container textarea::placeholder {
+    color: #a45ab5;
+    opacity: 1; /* override browser fade */
+}
+
+.contact-container label {
+    color: #7b2fa6;
+    font-weight: 600;
+}
+
+.contact-container .radio-group label {
+    color: #7b2fa6;
+    font-weight: 500;
+    cursor: pointer;
 }
 
 input, textarea {
@@ -525,7 +555,7 @@ textarea {
     margin-bottom: 22px;
 }
 
-.form-group {
+.auth-card .form-group {
     margin-bottom: 14px;
     text-align: left;
 }
@@ -594,4 +624,120 @@ textarea {
     .auth-card {
         padding: 25px;
     }
+}
+
+/* ========================================
+   PASSWORD STRENGTH METER
+======================================== */
+
+.strength-meter {
+    width: 100%;
+    height: 6px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 4px;
+    margin-top: 6px;
+    overflow: hidden;
+}
+
+#strengthBar {
+    height: 100%;
+    width: 0%;
+    transition: width 0.3s ease;
+    border-radius: 4px;
+}
+
+#strengthText {
+    font-size: 0.75rem;
+    display: block;
+    margin-top: 4px;
+}
+
+/* ========================================
+   MULTI STEP REGISTRATION WIZARD
+======================================== */
+
+.form-step {
+    display: none;
+    animation: fadeInHero 0.4s ease forwards;
+}
+
+.form-step.active {
+    display: block;
+}
+
+.next-btn,
+.back-btn {
+    width: 48%;
+    padding: 10px;
+    margin-top: 12px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+}
+
+.next-btn {
+    background: #C357E6;
+    color: white;
+}
+
+.back-btn {
+    background: #555;
+    color: white;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 6px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 4px;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 33%;
+    background: #C357E6;
+    transition: width 0.3s ease;
+}
+
+/* ERROR STATES */
+.error-msg {
+    color: #ff6b6b;
+    font-size: 0.75rem;
+    display: block;
+    margin-top: 4px;
+}
+
+input.error {
+    border: 2px solid #ff6b6b;
+}
+
+/* REVIEW BOX */
+#reviewBox {
+    text-align: left;
+    background: rgba(255,255,255,0.05);
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    color: #ededed;
+}
+
+/* CANCEL REGISTRATION BUTTON */
+.cancel-register-btn {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    background: transparent;
+    border: 1px solid #ff6b6b;
+    border-radius: 8px;
+    color: #ff6b6b;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.cancel-register-btn:hover {
+    background: #ff6b6b;
+    color: white;
 }
