@@ -6,6 +6,41 @@
 document.addEventListener("DOMContentLoaded", function () {
 
     /* =======================================================
+       Login Handler – Connects to API and manages authentication flow
+    ======================================================= */
+
+   const loginForm = document.getElementById("loginForm");
+
+if (loginForm) {
+  loginForm.addEventListener("submit", async function (e) {
+
+    e.preventDefault();
+
+    const email = document.getElementById("loginEmail").value;
+    const password = document.getElementById("loginPassword").value;
+
+    try {
+
+      const data = await loginUser(email, password);
+
+      // store JWT token
+      localStorage.setItem("token", data.token);
+
+      alert("Login successful");
+
+      // redirect to dashboard
+      window.location.href = "../dashboard.html";
+
+    } catch (error) {
+
+      alert(error.message || "Login failed");
+
+    }
+
+  });
+}
+
+    /* =======================================================
        HOME PAGE – QUOTE ROTATION
     ======================================================= */
 
@@ -124,46 +159,6 @@ document.addEventListener("DOMContentLoaded", function () {
             } else {
                 verificationNotice.innerText =
                     "Your email has already been verified.";
-            }
-        });
-    }
-
-    /* =======================================================
-       LOGIN PAGE LOGIC
-    ======================================================= */
-
-    const loginForm = document.getElementById("loginForm");
-
-    if (loginForm) {
-
-        const loginEmail = document.getElementById("loginEmail");
-        const loginPassword = document.getElementById("loginPassword");
-        const loginBtn = document.getElementById("loginBtn");
-
-        function validateLogin() {
-            loginBtn.disabled =
-                !loginEmail.value.trim() ||
-                !loginPassword.value.trim();
-        }
-
-        loginEmail.addEventListener("input", validateLogin);
-        loginPassword.addEventListener("input", validateLogin);
-
-        loginForm.addEventListener("submit", function (e) {
-            e.preventDefault();
-
-            const storedUser = "admin@risinggrace.com";
-            const storedPassHash = btoa("Secure123!");
-
-            if (
-                loginEmail.value === storedUser &&
-                btoa(loginPassword.value) === storedPassHash
-            ) {
-                sessionStorage.setItem("risingGraceUser", storedUser);
-                alert("Login successful.");
-                window.location.href = "../index.html";
-            } else {
-                alert("Invalid credentials.");
             }
         });
     }
