@@ -4,6 +4,12 @@
 ======================================== */
 
 document.addEventListener("DOMContentLoaded", function () {
+    /* =======================================================
+        Ariez JS – Custom utility functions for the Rising Grace project
+    ======================================================= */
+    setInterval(() => {
+    Ariez.monitorSession();
+    }, 60000);
 
     /* =======================================================
        Login Handler – Connects to API and manages authentication flow
@@ -21,21 +27,27 @@ if (loginForm) {
 
     try {
 
-      const data = await loginUser(email, password);
+    const data = await loginUser(email, password);
 
-      // store JWT token
-      localStorage.setItem("token", data.token);
+    // store JWT token
+    localStorage.setItem("token", data.token);
 
-      alert("Login successful");
+    // ARIEZ SECURITY LOG
+    Ariez.logEvent("LOGIN_SUCCESS", email);
 
-      // redirect to dashboard
-      window.location.href = "../dashboard.html";
+    alert("Login successful");
 
-    } catch (error) {
+    // redirect to dashboard
+    window.location.href = "../dashboard.html";
 
-      alert(error.message || "Login failed");
+} catch (error) {
 
-    }
+    // ARIEZ SECURITY LOG
+    Ariez.logEvent("LOGIN_FAILED", email);
+
+    alert(error.message || "Login failed");
+
+}
 
   });
 }
@@ -249,5 +261,25 @@ if (loginForm) {
 
         showStep(currentStep);
     }
+
+    /* ============================
+   LOGOUT HANDLER
+============================ */
+
+const logoutBtn = document.getElementById("logoutBtn");
+
+if (logoutBtn) {
+
+    logoutBtn.addEventListener("click", () => {
+
+        localStorage.removeItem("token");
+
+        alert("You have been logged out.");
+
+        window.location.href = "auth/login.html";
+
+    });
+
+}
 
 });
