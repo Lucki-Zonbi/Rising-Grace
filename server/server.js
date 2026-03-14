@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const helmet = require("helmet");
 const cors = require("cors");
+const securityRoutes = require("./routes/security");
 const authRoutes = require("./routes/authRoutes");
 
 dotenv.config();
@@ -15,6 +16,7 @@ app.use(cors());
 app.use(express.json({ limit: "10kb" }));
 
 app.use("/api/auth", authRoutes);
+app.use("/api/security", securityRoutes);
 
 // Basic Route
 app.get("/", (req, res) => {

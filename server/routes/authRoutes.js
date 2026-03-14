@@ -1,4 +1,5 @@
 const { authorize } = require("../middleware/roleMiddleware");
+const { detectThreat } = require("../services/threatDetection");
 const { protect } = require("../middleware/authMiddleware");
 const express = require("express");
 const bcrypt = require("bcryptjs");
@@ -50,19 +51,61 @@ router.post("/login", async (req, res) => {
     }
 
     const user = await User.findOne({ email });
+
     console.log("LOGIN EMAIL:", email);
     console.log("USER FOUND:", user);
+
     if (!user) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    console.log("PASSWORD MATCH:", isMatch);
-    if (!isMatch) {
-      return res.status(401).json({ message: "Invalid credentials" });
+    // Check if account is currently locked
+    if (user.locked && user.lockUntil > Date.now()) {
+      return res.status(403).json({
+        message: "Account locked. Try again later."
+      });
     }
 
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    console.log("PASSWORD MATCH:", isMatch);
+
+    if (!isMatch) {
+
+  await detectThreat({
+    type: "FAILED_LOGIN",
+    email,
+    ip: req.ip,
+    userAgent: req.headers["user-agent"]
+  });
+// Increase login atempts
+  user.loginAttempts += 1;
+
+  // Lock account if 5 failed attempts
+  if (user.loginAttempts >= 5) {
+    user.locked = true;
+    user.lockUntil = Date.now() + (20 * 60 * 1000);
+  }
+
+  await user.save();
+
+  return res.status(401).json({ message: "Invalid credentials" });
+}
+
+    // Successful login → reset attempts
+    user.loginAttempts = 0;
+    user.locked = false;
+    user.lockUntil = null;
+
     user.lastLogin = new Date();
+
+    await detectThreat({
+  type: "LOGIN_SUCCESS",
+  email,
+  ip: req.ip,
+  userAgent: req.headers["user-agent"]
+});
+
     await user.save();
 
     const token = jwt.sign(

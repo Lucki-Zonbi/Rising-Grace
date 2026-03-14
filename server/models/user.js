@@ -18,20 +18,36 @@ const userSchema = new mongoose.Schema(
       required: true,
       minlength: 8,
     },
-    role: {
-      type: String,
-      enum: ["user", "admin"],
-      default: "user",
+    loginAttempts: {
+      type: Number,
+      default: 0
     },
-    isVerified: {
-      type: Boolean,
-      default: false,
-    },
-    lastLogin: {
+
+    lockUntil: {
       type: Date,
-    },
-  },
-  { timestamps: true }
-);
+      default: null
+},
+
+locked: {
+  type: Boolean,
+  default: false
+},
+
+role: {
+  type: String,
+  enum: ["user", "admin"],
+  default: "user",
+},
+
+isVerified: {
+  type: Boolean,
+  default: false,
+},
+
+lastLogin: {
+type: Date,
+},
+
+ }, { timestamps: true });
 
 module.exports = mongoose.model("User", userSchema);

@@ -10,15 +10,20 @@ const Ariez = {
 
     logEvent(eventType, details) {
 
-        const entry = {
-            time: new Date().toISOString(),
-            event: eventType,
-            details: details
-        };
+    const entry = {
+        time: new Date().toISOString(),
+        event: eventType,
+        details: details
+    };
 
-        console.log("ARIEZ EVENT:", entry);
+    console.log("ARIEZ EVENT:", entry);
 
-        this.securityLog.push(entry);
+    this.securityLog.push(entry);
+
+    // Send event to backend
+    if (typeof logSecurityEvent === "function") {
+        logSecurityEvent(eventType, details);
+    }
     },
 
     monitorSession() {
