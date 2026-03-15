@@ -9,17 +9,41 @@
 
 </head>
 
-<body onload="checkAuth()">
+<body onload="checkAuth(); loadDashboard(); loadSecurityEvents();">
 
-    <h1>Welcome to Rising Grace Security Dashboard</h1>
+<h1 class="dashboard-title">Rising Grace Security Dashboard</h1>
 
-    <p>You are successfully logged in.</p>
+<div class="dashboard-container">
 
-    <button id="logoutBtn">Logout</button>
+  <div class="dashboard-card">
+    <h2>User Profile</h2>
+    <div id="userInfo">
+      Loading user information...
+    </div>
+  </div>
 
-    <script src="js/ariez.js"></script>
-    <script src="js/authGuard.js"></script>
-    <script src="js/script.js"></script>
+  <div class="dashboard-card">
+    <h2>Account Features</h2>
+    <div id="roleFeatures">
+      Loading features...
+    </div>
+  </div>
+
+  <div class="dashboard-card">
+    <h2>Ariez Security Monitor</h2>
+    <div id="securityEvents">
+      Loading security activity...
+    </div>
+  </div>
+
+</div>
+
+<button id="logoutBtn">Logout</button>
+
+<script src="js/ariez.js"></script>
+<script src="js/authGuard.js"></script>
+<script src="js/script.js"></script>
+<script src="js/dashboard.js"></script>
 
 </body>
 

@@ -1,0 +1,121 @@
+async function loadDashboard() {
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        return;
+    }
+
+    try {
+
+        const response = await fetch("http://127.0.0.1:5000/api/auth/me", {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        const user = await response.json();
+
+         // Format last login time
+        let lastLoginFormatted = "First Login";
+
+        if (user.lastLogin) {
+            const date = new Date(user.lastLogin);
+
+            lastLoginFormatted = date.toLocaleString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                hour: "numeric",
+                minute: "2-digit"
+            });
+        }
+
+        document.getElementById("userInfo").innerHTML = `
+            <p><strong>Name:</strong> ${user.name}</p>
+            <p><strong>Email:</strong> ${user.email}</p>
+            <p><strong>Role:</strong> ${user.role}</p>
+            <p><strong>Last Login:</strong> ${lastLoginFormatted}</p>
+        `;
+
+         showRoleFeatures(user.role);
+
+    } catch (error) {
+
+        console.error("Dashboard load error:", error);
+
+    }
+
+}
+
+function showRoleFeatures(role) {
+
+    const roleArea = document.getElementById("roleFeatures");
+
+    if (!roleArea) return;
+
+    if (role === "admin") {
+
+        roleArea.innerHTML = `
+            <h2>Admin Security Controls</h2>
+            <button onclick="goToAdminPanel()">Open Admin Panel</button>
+        `;
+
+    } else {
+
+        roleArea.innerHTML = `
+            <p>User account active.</p>
+        `;
+
+    }
+}
+
+function goToAdminPanel() {
+    window.location.href = "/admin.html";
+}
+
+async function loadSecurityEvents(){
+
+    const token = localStorage.getItem("token");
+
+    if(!token) return;
+
+    try{
+
+        const response = await fetch("http://127.0.0.1:5000/api/security/events",{
+            headers:{
+                Authorization:`Bearer ${token}`
+            }
+        });
+
+        const events = await response.json();
+
+        let html = "";
+
+        if(events.length === 0){
+            html = "<p>No recent security activity.</p>";
+        }
+
+        events.slice(0,5).forEach(event =>{
+
+            const date = new Date(event.timestamp).toLocaleString();
+
+            html += `
+                <p>
+                <strong>${event.type}</strong><br>
+                ${event.email || "Unknown user"}<br>
+                <small>${date}</small>
+                </p>
+                <hr>
+            `;
+        });
+
+        document.getElementById("securityEvents").innerHTML = html;
+
+    }
+    catch(error){
+
+        console.error("Security panel error:",error);
+
+    }
+}

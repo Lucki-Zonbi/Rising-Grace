@@ -741,3 +741,29 @@ input.error {
     background: #ff6b6b;
     color: white;
 }
+
+.dashboard-title{
+    text-align:center;
+    margin-top:20px;
+    color: rgb(128, 4, 128);
+}
+
+.dashboard-container{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:20px;
+    padding:30px;
+}
+
+.dashboard-card{
+    background: whitesmoke;
+    border-radius:10px;
+    padding:20px;
+    box-shadow:0 0 10px rgba(0,0,0,0.3);
+}
+
+.dashboard-card h2{
+    color:violet;
+    margin-bottom:10px;
+}
+
