@@ -119,3 +119,65 @@ async function loadSecurityEvents(){
 
     }
 }
+
+function startAriezMonitor(){
+
+setInterval(checkForThreats,5000);
+
+}
+
+async function checkForThreats(){
+
+
+const token = localStorage.getItem("token");
+
+if(!token) return;
+
+try{
+
+const response = await fetch("http://127.0.0.1:5000/api/security/events",{
+
+headers:{
+Authorization:`Bearer ${token}`
+}
+
+});
+
+const events = await response.json();
+
+
+const threatEvent = events.find(event =>
+
+event.type && (
+event.event.includes("LOCK") ||
+event.event.includes("FAIL") ||
+event.type === "FAILED_LOGIN" ||
+event.type === "MULTIPLE_FAILED_LOGINS" ||
+));
+
+if(threatEvent){
+
+activateAriezAlert(threatEvent);
+
+}
+
+}
+catch(error){
+
+console.error("Ariez monitor error:",error);
+
+}
+
+}
+
+function activateAriezAlert(event){
+
+const banner = document.getElementById("ariezAlertBanner");
+
+banner.classList.remove("hidden");
+
+banner.innerHTML = `
+⚠ ARIEZ ALERT: ${event.type} DETECTED
+`;
+
+}

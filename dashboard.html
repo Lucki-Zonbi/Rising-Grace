@@ -9,7 +9,11 @@
 
 </head>
 
-<body onload="checkAuth(); loadDashboard(); loadSecurityEvents();">
+<body onload="checkAuth(); loadDashboard(); loadSecurityEvents(); startAriezMonitor();">
+
+ <div id="ariezAlertBanner" class="ariez-banner hidden">
+⚠ ARIEZ SECURITY ALERT DETECTED
+</div>
 
 <h1 class="dashboard-title">Rising Grace Security Dashboard</h1>
 

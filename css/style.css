@@ -767,3 +767,31 @@ input.error {
     margin-bottom:10px;
 }
 
+.ariez-banner{
+
+background:#ff2d2d;
+color:white;
+text-align:center;
+padding:12px;
+font-weight:bold;
+letter-spacing:1px;
+position:fixed;
+top:0;
+width:100%;
+z-index:1000;
+
+animation:alertPulse 1.5s infinite;
+
+}
+
+.hidden{
+display:none;
+}
+
+@keyframes alertPulse{
+
+0%{opacity:1;}
+50%{opacity:0.6;}
+100%{opacity:1;}
+
+}
