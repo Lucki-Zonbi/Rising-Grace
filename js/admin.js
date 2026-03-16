@@ -1,3 +1,62 @@
+async function loadSecurityEvents() {
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        console.warn("No token found");
+        return;
+    }
+
+    try {
+
+        const response = await fetch("http://127.0.0.1:5000/api/security/events", {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            console.error("Failed to fetch security events:", response.status);
+            return;
+        }
+
+        const events = await response.json();
+
+        const eventsContainer = document.getElementById("securityEvents");
+
+        if (!eventsContainer) {
+            console.warn("securityEvents element not found in admin.html");
+            return;
+        }
+
+        if (events.length === 0) {
+            eventsContainer.innerHTML = "<p>No security events recorded.</p>";
+            return;
+        }
+
+        eventsContainer.innerHTML = events.map(event => {
+
+            const time = new Date(event.timestamp).toLocaleString();
+
+            return `
+                <div class="event-card">
+                    <strong>${event.type || event.event}</strong>
+                    <p>User: ${event.email || "Unknown"}</p>
+                    <p>IP: ${event.ip || "Unknown"}</p>
+                    <p>Time: ${time}</p>
+                </div>
+            `;
+
+        }).join("");
+
+    } catch (error) {
+
+        console.error("Error loading security events:", error);
+
+    }
+
+}
+
 async function loadUsers(){
 
 const token = localStorage.getItem("token");

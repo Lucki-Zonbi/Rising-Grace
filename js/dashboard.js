@@ -149,10 +149,10 @@ const events = await response.json();
 const threatEvent = events.find(event =>
 
 event.type && (
-event.event.includes("LOCK") ||
-event.event.includes("FAIL") ||
+event.type.includes("LOCK") ||
+event.type.includes("FAIL") ||
 event.type === "FAILED_LOGIN" ||
-event.type === "MULTIPLE_FAILED_LOGINS" ||
+event.type === "MULTIPLE_FAILED_LOGINS"
 ));
 
 if(threatEvent){
