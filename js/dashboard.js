@@ -181,3 +181,12 @@ banner.innerHTML = `
 `;
 
 }
+
+const responses = JSON.parse(localStorage.getItem("questionnaireResponses"));
+
+if (responses && responses.length > 0) {
+    const result = calculateReadiness(responses);
+
+    document.getElementById("readinessScore").innerText = result.score;
+    document.getElementById("readinessLevel").innerText = result.level;
+}

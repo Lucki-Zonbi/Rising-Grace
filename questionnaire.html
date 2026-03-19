@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rising Grace – Assessment</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Rising Grace Coaching Assessment</h1>
+    <p>Please answer all questions honestly.</p>
+
+    <!-- 1. About You -->
+    <h2>1. About You & Your Situation</h2>
+
+    <textarea id="values" placeholder="What are your core values and principles?"></textarea>
+
+    <textarea id="energy" placeholder="What energizes you vs. drains you?"></textarea>
+
+    <p>Work/Life Balance (1–10)</p>
+    <div class="scale" data-question="balance"></div>
+
+    <textarea id="disappointment" placeholder="What is the most disappointing thing in your life right now?"></textarea>
+
+    <!-- 2. Goals -->
+    <h2>2. Goals & Vision</h2>
+
+    <textarea id="goal" placeholder="What is the one thing you most want to change/achieve?"></textarea>
+
+    <textarea id="future" placeholder="Describe your ideal future (1 year from now)."></textarea>
+
+    <textarea id="tenVision" placeholder="What would a '10' look like in your life?"></textarea>
+
+    <!-- 3. Challenges -->
+    <h2>3. Challenges & Obstacles</h2>
+
+    <textarea id="struggles" placeholder="What are your biggest struggles or obstacles?"></textarea>
+
+    <textarea id="pastBlocks" placeholder="What has stopped you in the past?"></textarea>
+
+    <textarea id="sabotage" placeholder="How do you sabotage your progress?"></textarea>
+
+    <textarea id="fears" placeholder="What fears do you have about making changes?"></textarea>
+
+    <!-- 4. Coaching -->
+    <h2>4. Coaching Relationship</h2>
+
+    <textarea id="learningStyle" placeholder="How do you best receive feedback?"></textarea>
+
+    <textarea id="support" placeholder="What kind of support do you need?"></textarea>
+
+    <textarea id="help" placeholder="How can I best help you?"></textarea>
+
+    <textarea id="challenge" placeholder="Are you willing to be challenged and give honest feedback?"></textarea>
+
+    <!-- 5. Action -->
+    <h2>5. Action & Commitment</h2>
+
+    <textarea id="firstStep" placeholder="What is the first small step you can take?"></textarea>
+
+    <p>Commitment Level (1–10)</p>
+    <div class="scale" data-question="commitment"></div>
+
+    <textarea id="sacrifice" placeholder="What must you say 'No' to in order to say 'Yes' to your goals?"></textarea>
+
+    <!-- Acknowledgment -->
+    <div class="acknowledgment">
+        <input type="checkbox" id="ack">
+        <label for="ack">
+            I understand this is a coaching service and not therapy or medical treatment.
+        </label>
+    </div>
+
+    <button id="submitBtn">Submit Assessment</button>
+
+    <p id="errorMsg"></p>
+
+</div>
+
+<script src="js/questionnaire.js"></script>
+
+</body>
+</html>

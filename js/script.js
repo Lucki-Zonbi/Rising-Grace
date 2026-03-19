@@ -283,3 +283,26 @@ if (logoutBtn) {
 }
 
 });
+
+function calculateReadiness(responses) {
+    let total = 0;
+    let count = 0;
+
+    responses.forEach(q => {
+        if (q.type === "scale") {
+            total += Number(q.answer);
+            count++;
+        }
+    });
+
+    const avg = count ? total / count : 0;
+
+    let level = "Low";
+    if (avg >= 7) level = "High";
+    else if (avg >= 4) level = "Medium";
+
+    return {
+        score: Number(avg.toFixed(1)),
+        level
+    };
+}
