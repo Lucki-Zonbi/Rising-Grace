@@ -13,6 +13,7 @@ const authRoutes = require("./routes/authRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const security = require("./routes/security"); // this matches your actual file
 const questionnaireRoutes = require("./routes/Questionnaire2");
+const scheduleRoutes = require("./routes/schedule");
 
 // Security middleware
 app.use(helmet());
@@ -24,6 +25,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/security", security); // correctly mounted
 app.use("/api/questionnaire", questionnaireRoutes);
+app.use("/api/schedule", scheduleRoutes);
 
 // Basic route
 app.get("/", (req, res) => {
