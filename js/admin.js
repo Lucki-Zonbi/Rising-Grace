@@ -120,3 +120,26 @@ Authorization:`Bearer ${token}`
 loadUsers();
 
 }
+
+async function loadSessions() {
+    const res = await fetch("/api/schedule/all");
+    const sessions = await res.json();
+
+    const container = document.getElementById("sessionsList");
+
+    container.innerHTML = sessions.map(s => `
+        <div class="card">
+            <p><strong>${s.userId?.name || "User"}</strong></p>
+            <p>${s.date} at ${s.time}</p>
+        </div>
+    `).join("");
+}
+
+// call this ONLY if admin
+if (document.getElementById("sessionsList")) {
+    loadSessions();
+}
+
+document.getElementById("backToDashboard").addEventListener("click", () => {
+    window.location.href = "dashboard.html";
+});

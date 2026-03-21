@@ -189,4 +189,28 @@ if (responses && responses.length > 0) {
 
     document.getElementById("readinessScore").innerText = result.score;
     document.getElementById("readinessLevel").innerText = result.level;
+
+ // (Ariez insight)
+    const insight = ariezSchedulingInsight(result.score, 0);
+
+    const ariezEl = document.getElementById("ariezMessage");
+    if (ariezEl) {
+        ariezEl.innerText = insight;
+    }
+}
+
+function ariezSchedulingInsight(score, sessionsToday) {
+    if (score < 4) {
+        return "⚠️ Client not ready. Limit scheduling.";
+    }
+
+    if (score < 7) {
+        return "⚠️ Moderate readiness. Recommend 1 session.";
+    }
+
+    if (sessionsToday >= 2) {
+        return "⛔ Limit reached for today.";
+    }
+
+    return "✅ Client ready for scheduling.";
 }

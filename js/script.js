@@ -4,53 +4,122 @@
 ======================================== */
 
 document.addEventListener("DOMContentLoaded", function () {
+
     /* =======================================================
-        Ariez JS – Custom utility functions for the Rising Grace project
+        Ariez JS – Custom utility functions
     ======================================================= */
+    if (typeof Ariez !== "undefined") {
     setInterval(() => {
-    Ariez.monitorSession();
+        Ariez.monitorSession();
     }, 60000);
+}
 
     /* =======================================================
-       Login Handler – Connects to API and manages authentication flow
+       Login Handler – UPDATED
     ======================================================= */
 
-   const loginForm = document.getElementById("loginForm");
+    const loginForm = document.getElementById("loginForm");
 
-if (loginForm) {
-  loginForm.addEventListener("submit", async function (e) {
+    if (loginForm) {
 
-    e.preventDefault();
+        const emailInput = document.getElementById("email");
+        const passwordInput = document.getElementById("password");
+        const loginBtn = document.getElementById("loginBtn");
+        const strengthBar = document.getElementById("strengthBar");
+        const strengthText = document.getElementById("strengthText");
+        const togglePassword = document.getElementById("togglePassword");
 
-    const email = document.getElementById("loginEmail").value;
-    const password = document.getElementById("loginPassword").value;
+        // 🔐 PASSWORD STRENGTH + COLOR + TEXT
+        if (passwordInput && strengthBar && strengthText) {
 
-    try {
+            passwordInput.addEventListener("input", () => {
 
-    const data = await loginUser(email, password);
+                const value = passwordInput.value;
+                let strength = 0;
 
-    // store JWT token
-    localStorage.setItem("token", data.token);
+                if (value.length > 5) strength++;
+                if (/[A-Z]/.test(value)) strength++;
+                if (/[0-9]/.test(value)) strength++;
+                if (/[^A-Za-z0-9]/.test(value)) strength++;
 
-    // ARIEZ SECURITY LOG
-    Ariez.logEvent("LOGIN_SUCCESS", email);
+                strengthBar.className = "";
 
-    alert("Login successful");
+                if (strength <= 1) {
+                    strengthBar.classList.add("weak");
+                    strengthText.innerText = "Weak";
+                }
+                else if (strength <= 3) {
+                    strengthBar.classList.add("medium");
+                    strengthText.innerText = "Medium";
+                }
+                else {
+                    strengthBar.classList.add("strong");
+                    strengthText.innerText = "Strong";
+                }
 
-    // redirect to dashboard
-    window.location.href = "../dashboard.html";
+                validateForm();
+            });
+        }
 
-} catch (error) {
+        // 👁️ TOGGLE PASSWORD
+        if (togglePassword && passwordInput) {
+            togglePassword.addEventListener("click", () => {
+                passwordInput.type =
+                    passwordInput.type === "password" ? "text" : "password";
+            });
+        }
 
-    // ARIEZ SECURITY LOG
+        // ✅ BUTTON ENABLE LOGIC
+        function validateForm() {
+            if (emailInput?.value && passwordInput?.value) {
+                loginBtn.disabled = false;
+                loginBtn.style.opacity = "1";
+            } else {
+                loginBtn.disabled = true;
+                loginBtn.style.opacity = "0.5";
+            }
+        }
+
+        if (emailInput && passwordInput && loginBtn) {
+            emailInput.addEventListener("input", validateForm);
+            passwordInput.addEventListener("input", validateForm);
+        }
+
+        // 🚀 LOGIN SUBMIT
+        loginForm.addEventListener("submit", async function (e) {
+
+            e.preventDefault();
+
+            const email = emailInput.value;
+            const password = passwordInput.value;
+
+            try {
+
+                const data = await loginUser(email, password);
+
+                localStorage.setItem("token", data.token);
+
+                if (typeof Ariez !== "undefined") {
+    setInterval(() => {
+        Ariez.monitorSession();
+    }, 60000);
+}
+
+                alert("Login successful");
+
+                window.location.href = "../dashboard.html";
+
+            } catch (error) {
+
+                if (typeof Ariez !== "undefined") {
     Ariez.logEvent("LOGIN_FAILED", email);
-
-    alert(error.message || "Login failed");
-
 }
 
-  });
-}
+                alert(error.message || "Login failed");
+            }
+
+        });
+    }
 
     /* =======================================================
        HOME PAGE – QUOTE ROTATION
@@ -263,26 +332,29 @@ if (loginForm) {
     }
 
     /* ============================
-   LOGOUT HANDLER
-============================ */
+       LOGOUT HANDLER
+    ============================ */
 
-const logoutBtn = document.getElementById("logoutBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
 
-if (logoutBtn) {
+    if (logoutBtn) {
 
-    logoutBtn.addEventListener("click", () => {
+        logoutBtn.addEventListener("click", () => {
 
-        localStorage.removeItem("token");
+            localStorage.removeItem("token");
 
-        alert("You have been logged out.");
+            alert("You have been logged out.");
 
-        window.location.href = "auth/login.html";
+            window.location.href = "auth/login.html";
 
-    });
-
-}
+        });
+    }
 
 });
+
+/* ============================
+   READINESS CALCULATION
+============================ */
 
 function calculateReadiness(responses) {
     let total = 0;

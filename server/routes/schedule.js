@@ -1,25 +1,29 @@
 const express = require("express");
 const router = express.Router();
 const Questionnaire = require("../models/Questionnaire");
-
-const express = require("express");
-const router = express.Router();
-const Questionnaire = require("../models/Questionnaire");
 const Schedule = require("../models/Schedule");
+const { protect } = require("../middleware/authMiddleware");
 
-router.post("/", async (req, res) => {
+router.post("/", protect, async (req, res) => {
     try {
-        const { userId, date, time } = req.body;
+        const userId = req.user._id; // ✅ SECURE
+        const { date, time } = req.body;
 
-        // 1. Check questionnaire
-        const exists = await Questionnaire.findOne({ userId });
-        if (!exists) {
+        const questionnaire = await Questionnaire.findOne({ userId });
+
+        if (!questionnaire) {
             return res.status(403).json({
                 error: "Complete questionnaire first"
             });
         }
 
-        // 2. Max 2/day
+        // 🔥 ARIEZ LOGIC
+        if (questionnaire.score < 4) {
+            return res.status(403).json({
+                error: "Ariez: Client not ready"
+            });
+        }
+
         const daily = await Schedule.find({ userId, date });
 
         if (daily.length >= 2) {
@@ -28,7 +32,12 @@ router.post("/", async (req, res) => {
             });
         }
 
-        // 3. 1-hour spacing
+        if (questionnaire.score < 7 && daily.length >= 1) {
+            return res.status(400).json({
+                error: "Ariez: Only 1 session allowed"
+            });
+        }
+
         const newTime = new Date(`${date}T${time}`);
 
         for (let b of daily) {
@@ -37,16 +46,15 @@ router.post("/", async (req, res) => {
 
             if (diff < 60) {
                 return res.status(400).json({
-                    error: "Must be at least 1 hour apart"
+                    error: "Must be 1 hour apart"
                 });
             }
         }
 
-        // 4. Save
         const booking = new Schedule({ userId, date, time });
         await booking.save();
 
-        res.json({ message: "Session booked successfully" });
+        res.json({ message: "Session booked (Ariez approved)" });
 
     } catch (err) {
         res.status(500).json({ error: "Server error" });

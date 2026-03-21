@@ -46,12 +46,18 @@
         </div>
 
         <div class="form-group">
-            <label>Password</label>
-            <input type="password" id="regPassword" required>
-            <div class="strength-meter">
-                <div id="strengthBar"></div>
-            </div>
-            <small id="strengthText"></small>
+    <label>Password</label>
+
+    <div class="password-wrapper">
+        <input type="password" id="password" required>
+        <span id="togglePassword">👁️</span>
+    </div>
+
+    <div class="strength-container">
+        <div id="strengthBar"></div>
+    </div>
+
+    <small id="strengthText"></small>
             <small class="error-msg"></small>
         </div>
 

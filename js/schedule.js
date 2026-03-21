@@ -9,20 +9,32 @@ async function scheduleSession() {
     const date = document.getElementById("date").value;
     const time = document.getElementById("time").value;
 
-    const res = await fetch("/api/schedule", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            userId: localStorage.getItem("userId"),
-            date,
-            time
-        })
-    });
+    const token = localStorage.getItem("token");
 
-    const data = await res.json();
+    if (!date || !time) {
+        document.getElementById("message").innerText = "Please select date and time.";
+        return;
+    }
 
-    document.getElementById("message").innerText =
-        data.message || data.error;
+    try {
+        const res = await fetch("/api/schedule", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}` // ✅ REQUIRED
+            },
+            body: JSON.stringify({
+                date,
+                time
+            })
+        });
+
+        const data = await res.json();
+
+        document.getElementById("message").innerText =
+            data.message || data.error;
+
+    } catch (err) {
+        document.getElementById("message").innerText = "Error scheduling session.";
+    }
 }
