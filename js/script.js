@@ -3,6 +3,12 @@
    Production Structured JS
 ======================================== */
 
+function isPreviewMode() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get("preview") === "true" ||
+           localStorage.getItem("previewMode") === "true";
+}
+
 document.addEventListener("DOMContentLoaded", function () {
 
     /* =======================================================
@@ -270,27 +276,32 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         function validateStep(step) {
-            let valid = true;
-            const inputs = steps[step].querySelectorAll("input");
 
-            inputs.forEach(input => {
-                const error = input.parentElement.querySelector(".error-msg");
-                input.classList.remove("error");
-                error.textContent = "";
+    // 🔥 BYPASS VALIDATION COMPLETELY IN PREVIEW MODE
+    if (isPreviewMode()) return true;
 
-                if (!input.checkValidity()) {
-                    input.classList.add("error");
-                    error.textContent = "This field is required.";
-                    valid = false;
-                }
-            });
+    let valid = true;
+    const inputs = steps[step].querySelectorAll("input");
 
-            return valid;
+    inputs.forEach(input => {
+        const error = input.parentElement.querySelector(".error-msg");
+        input.classList.remove("error");
+
+        if (error) error.textContent = "";
+
+        if (!input.checkValidity()) {
+            input.classList.add("error");
+            if (error) error.textContent = "This field is required.";
+            valid = false;
         }
+    });
+
+    return valid;
+}
 
         nextBtns.forEach(btn => {
             btn.addEventListener("click", () => {
-                if (!validateStep(currentStep)) return;
+                if (!validateStep(currentStep) && !isPreviewMode()) return;
 
                 if (currentStep < steps.length - 1) {
                     currentStep++;

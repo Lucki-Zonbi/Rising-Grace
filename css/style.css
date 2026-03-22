@@ -894,23 +894,37 @@ h2 {
     margin-top: 10px;
 }
 
+.scale {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* SCALE BUTTONS */
 .scale button {
-    margin: 5px;
-    padding: 10px 15px;
+    flex: 1 0 40px; /* keeps them evenly sized */
+    padding: 10px;
     border: none;
     background-color: #822794;
     color: white;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: all 0.2s ease;
 }
 
+/*Hover*/
 .scale button:hover {
     background-color: #f35e8f;
+    transform: scale(1.05);
 }
 
+/*Selected State*/
 .scale button.selected {
     background-color: #f35e8f;
     transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(243, 94, 143, 0.7);
 }
 
 .acknowledgment {
@@ -927,5 +941,99 @@ h2 {
 }
 
 #submitBtn:hover {
+    background-color: #f35e8f;
+}
+
+/*Admin Preview Styles*/
+/* ===============================
+   ADMIN PREVIEW CARD
+================================ */
+
+.preview-card {
+    padding: 20px;
+}
+
+/* STRAIGHT LINE BUTTON LAYOUT */
+.preview-grid {
+    display: flex;
+    flex-wrap: wrap;       /* allows wrapping into rows */
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* BUTTONS */
+.preview-grid button {
+    flex: 0 0 120px;       /* fixed width = straight alignment */
+    padding: 10px;
+    border: none;
+    background: #822794;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    transition: 0.2s ease;
+}
+
+/* HOVER */
+.preview-grid button:hover {
+    background: #f35e8f;
+    transform: scale(1.05);
+}
+
+/* FULL FLOW BUTTON */
+.full-flow-btn {
+    display: block;
+    margin: 15px auto 0;
+    padding: 10px 20px;
+    border: none;
+    background: #822794;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.full-flow-btn:hover {
+    background: #f35e8f;
+}
+
+/* ===============================
+   ADMIN CREATE CARD FORM STYLING
+================================ */
+
+/* Limit width of the card content */
+.card {
+    max-width: 400px;   /* controls overall width */
+    margin: 20px auto;  /* center horizontally */
+    padding: 20px;
+}
+
+/* Stack inputs nicely */
+.card input {
+    width: 100%;
+    max-width: 320px;   /* prevents full stretch */
+    display: block;
+    margin: 10px auto;  /* centers inputs */
+    padding: 10px;
+    border-radius: 6px;
+    border: none;
+    outline: none;
+}
+
+/* Button styling */
+.card button {
+    display: block;
+    margin: 15px auto;
+    padding: 10px 15px;
+    background-color: #822794;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+/* Hover effect */
+.card button:hover {
     background-color: #f35e8f;
 }

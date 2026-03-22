@@ -135,3 +135,24 @@ router.get("/me", protect, async (req, res) => {
 router.get("/admin", protect, authorize("admin"), (req, res) => {
   res.json({ message: "Admin access granted" });
 });
+
+router.post("/create-admin", async (req, res) => {
+  try {
+
+    const { name, email, password } = req.body;
+
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    const user = await User.create({
+      name,
+      email,
+      password: hashedPassword,
+      role: "admin"
+    });
+
+    res.json({ message: "Admin created", user });
+
+  } catch (err) {
+    res.status(500).json({ message: "Error creating admin" });
+  }
+});

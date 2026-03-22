@@ -48,6 +48,33 @@
 
 </div>
 
+<div class="card preview-card">
+    <h3>Admin Preview Mode</h3>
+
+    <div class="preview-grid">
+        <button onclick="previewPage('../index.html')">Home</button>
+        <button onclick="previewPage('../about/about.html')">About</button>
+        <button onclick="previewPage('../contact/contact.html')">Contact</button>
+        <button onclick="previewPage('../auth/register.html')">Register</button>
+        <button onclick="previewPage('../questionnaire.html')">Questionnaire</button>
+        <button onclick="previewPage('../schedule.html')">Schedule</button>
+    </div>
+
+    <div><button class="full-flow-btn" onclick="startFullPreview()">Full User Flow</button>
+    </div>
+
+</div>
+
+<div class="card">
+    <h3>Create Admin</h3>
+
+    <input id="adminName" placeholder="Name">
+    <input id="adminEmail" placeholder="Email">
+    <input id="adminPassword" placeholder="Password">
+
+    <button onclick="createAdmin()">Create Admin</button>
+</div>
+
 <button id="logoutBtn">Logout</button>
 
 <script src="js/ariez.js"></script>

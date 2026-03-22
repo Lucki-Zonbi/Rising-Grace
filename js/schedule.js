@@ -1,9 +1,10 @@
 const responses = JSON.parse(localStorage.getItem("questionnaireResponses"));
 
-if (!responses || responses.length === 0) {
+if ((!responses || responses.length === 0) && !isPreviewMode()) {
     alert("Complete questionnaire first.");
+    return;
     window.location.href = "/questionnaire.html";
-}
+    }
 
 async function scheduleSession() {
     const date = document.getElementById("date").value;
@@ -15,6 +16,11 @@ async function scheduleSession() {
         document.getElementById("message").innerText = "Please select date and time.";
         return;
     }
+
+    if (!questionnaireCompleted && !isPreviewMode()) {
+    alert("Complete questionnaire first");
+    return;
+}
 
     try {
         const res = await fetch("/api/schedule", {

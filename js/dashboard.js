@@ -214,3 +214,31 @@ function ariezSchedulingInsight(score, sessionsToday) {
 
     return "✅ Client ready for scheduling.";
 }
+
+function previewPage(url) {
+    window.location.href = `${url}?preview=true`;
+}
+
+function startFullPreview() {
+    localStorage.setItem("previewMode", "true");
+    window.location.href = "../index.html?preview=true";
+}
+
+async function createAdmin() {
+
+    const name = document.getElementById("adminName").value;
+    const email = document.getElementById("adminEmail").value;
+    const password = document.getElementById("adminPassword").value;
+
+    const res = await fetch("http://localhost:5000/api/auth/create-admin", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ name, email, password })
+    });
+
+    const data = await res.json();
+
+    alert(data.message);
+}
