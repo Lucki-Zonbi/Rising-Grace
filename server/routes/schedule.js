@@ -114,4 +114,67 @@ router.get("/all", async (req, res) => {
         res.status(500).json({ error: "Server error" });
     }
 });
+
+// DELETE (Cancel Session)
+router.delete("/:id", protect, async (req, res) => {
+    try {
+        const session = await Schedule.findById(req.params.id);
+
+        if (!session) {
+            return res.status(404).json({ error: "Session not found" });
+        }
+
+        if (req.user.role !== "admin") {
+            return res.status(403).json({ error: "Admin only" });
+        }
+
+        await session.deleteOne();
+
+        res.json({ message: "Session cancelled" });
+
+    } catch (err) {
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+// PUT (Reschedule Session)
+router.put("/:id", protect, async (req, res) => {
+    try {
+        const { date, time } = req.body;
+
+        const session = await Schedule.findById(req.params.id);
+
+        if (!session) {
+            return res.status(404).json({ error: "Session not found" });
+        }
+
+        if (req.user.role !== "admin") {
+            return res.status(403).json({ error: "Admin only" });
+        }
+
+        session.date = date;
+        session.time = time;
+
+        await session.save();
+
+        res.json({ message: "Session updated" });
+
+    } catch (err) {
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+//get my sessions
+router.get("/my-sessions", protect, async (req, res) => {
+    try {
+        const userId = req.user._id;
+
+        const sessions = await Schedule.find({ userId });
+
+        res.json(sessions);
+
+    } catch (err) {
+        res.status(500).json({ error: "Server error" });
+    }
+});
 module.exports = router;

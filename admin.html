@@ -34,10 +34,26 @@ Loading events...
 <div id="sessionsList"></div>
 </div>
 
+<hr>
+
+<h3>Analytics</h3>
+
+<div class="card">
+  <p>Total Sessions: <span id="totalSessions">--</span></p>
+  <p>Total Users: <span id="totalUsers">--</span></p>
+  <p>Low Readiness: <span id="lowCount">--</span></p>
+  <p>Medium Readiness: <span id="mediumCount">--</span></p>
+  <p>High Readiness: <span id="highCount">--</span></p>
+</div>
+
+<h3>Readiness Distribution</h3>
+<canvas id="readinessChart"></canvas>
+
 </div>
 
 <script src="js/authGuard.js"></script>
 <script src="js/admin.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </body>
 

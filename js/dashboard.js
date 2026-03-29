@@ -199,6 +199,7 @@ if (responses && responses.length > 0) {
     }
 }
 
+// Ariezz scheduling insight logic (bonus feature)
 function ariezSchedulingInsight(score, sessionsToday) {
     if (score < 4) {
         return "⚠️ Client not ready. Limit scheduling.";
@@ -241,4 +242,35 @@ async function createAdmin() {
     const data = await res.json();
 
     alert(data.message);
+}
+// Ariez live scheduling insight (bonus feature)
+async function loadAriezLive() {
+    const token = localStorage.getItem("token");
+
+    const res = await fetch("/api/schedule/my-sessions", {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    });
+
+    const sessions = await res.json();
+
+    const today = new Date().toISOString().split("T")[0];
+
+    const sessionsToday = sessions.filter(s => s.date === today).length;
+
+    const responses = JSON.parse(localStorage.getItem("questionnaireResponses"));
+
+    if (responses) {
+        const result = calculateReadiness(responses);
+
+        const insight = ariezSchedulingInsight(result.score, sessionsToday);
+
+        const el = document.getElementById("ariezMessage");
+        if (el) el.innerText = insight;
+    }
+}
+
+if (document.getElementById("ariezMessage")) {
+    loadAriezLive();
 }

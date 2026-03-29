@@ -128,11 +128,14 @@ async function loadSessions() {
     const container = document.getElementById("sessionsList");
 
     container.innerHTML = sessions.map(s => `
-        <div class="card">
-            <p><strong>${s.userId?.name || "User"}</strong></p>
-            <p>${s.date} at ${s.time}</p>
-        </div>
-    `).join("");
+    <div class="card">
+        <p><strong>${s.userId?.name || "User"}</strong></p>
+        <p>${s.date} at ${s.time}</p>
+
+        <button onclick="cancelSession('${s._id}')">Cancel</button>
+        <button onclick="rescheduleSession('${s._id}')">Reschedule</button>
+    </div>
+`).join("");
 }
 
 // call this ONLY if admin
@@ -143,3 +146,80 @@ if (document.getElementById("sessionsList")) {
 document.getElementById("backToDashboard").addEventListener("click", () => {
     window.location.href = "dashboard.html";
 });
+
+async function cancelSession(id) {
+    const token = localStorage.getItem("token");
+
+    await fetch(`/api/schedule/${id}`, {
+        method: "DELETE",
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    });
+
+    loadSessions();
+}
+
+async function rescheduleSession(id) {
+    const newDate = prompt("Enter new date (YYYY-MM-DD):");
+    const newTime = prompt("Enter new time (HH:MM):");
+
+    const token = localStorage.getItem("token");
+
+    await fetch(`/api/schedule/${id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ date: newDate, time: newTime })
+    });
+
+    loadSessions();
+}
+
+async function loadAnalytics() {
+    const token = localStorage.getItem("token");
+
+    try {
+        const res = await fetch("/api/analytics/stats", {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        const data = await res.json();
+
+        // Fill numbers
+        document.getElementById("totalSessions").innerText = data.totalSessions;
+        document.getElementById("totalUsers").innerText = data.totalUsers;
+        document.getElementById("lowCount").innerText = data.readiness.low;
+        document.getElementById("mediumCount").innerText = data.readiness.medium;
+        document.getElementById("highCount").innerText = data.readiness.high;
+
+        // Create chart
+        const ctx = document.getElementById("readinessChart");
+
+        // ✅ Prevent duplicate charts
+        if (window.readinessChartInstance) {
+            window.readinessChartInstance.destroy();
+        }
+
+        window.readinessChartInstance = new Chart(ctx, {
+            type: "pie",
+            data: {
+                labels: ["Low", "Medium", "High"],
+                datasets: [{
+                    data: [
+                        data.readiness.low,
+                        data.readiness.medium,
+                        data.readiness.high
+                    ]
+                }]
+            }
+        });
+
+    } catch (err) {
+        console.error("Analytics error:", err);
+    }
+}

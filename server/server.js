@@ -9,6 +9,7 @@ dotenv.config();
 const app = express();
 
 // Routes
+const analyticsRoutes = require("./routes/analytics");
 const authRoutes = require("./routes/authRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const security = require("./routes/security"); // this matches your actual file
@@ -21,6 +22,7 @@ app.use(cors());
 app.use(express.json({ limit: "10kb" }));
 
 // API routes
+app.use("/api/analytics", analyticsRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/security", security); // correctly mounted
