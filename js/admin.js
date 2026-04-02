@@ -223,3 +223,16 @@ async function loadAnalytics() {
         console.error("Analytics error:", err);
     }
 }
+
+async function refundPayment(id) {
+    const token = localStorage.getItem("token");
+
+    await fetch(`/api/payment/refund/${id}`, {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    });
+
+    alert("Payment refunded");
+}

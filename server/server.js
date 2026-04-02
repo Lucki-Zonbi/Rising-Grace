@@ -9,6 +9,7 @@ dotenv.config();
 const app = express();
 
 // Routes
+const paymentRoutes = require("./routes/payment");
 const analyticsRoutes = require("./routes/analytics");
 const authRoutes = require("./routes/authRoutes");
 const adminRoutes = require("./routes/adminRoutes");
@@ -22,6 +23,7 @@ app.use(cors());
 app.use(express.json({ limit: "10kb" }));
 
 // API routes
+app.use("/api/payment", paymentRoutes);
 app.use("/api/analytics", analyticsRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);

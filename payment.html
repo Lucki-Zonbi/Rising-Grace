@@ -1,0 +1,25 @@
+<h2>Payment</h2>
+
+<div class="card">
+  <h3>Billing Information</h3>
+
+  <input type="text" id="name" placeholder="Full Name" />
+  <input type="text" id="cardNumber" placeholder="Card Number" />
+  <input type="text" id="expiry" placeholder="MM/YY" />
+  <input type="text" id="cvv" placeholder="CVV" />
+
+  <button onclick="payWithCard()">Pay with Card</button>
+</div>
+
+<hr>
+
+<div class="card">
+  <h3>Other Payment Options</h3>
+
+  <button onclick="payWithStripe()">Pay with Stripe</button>
+  <button onclick="payWithPayPal()">Pay with PayPal</button>
+</div>
+
+<p id="paymentMessage"></p>
+
+<script src="/js/payment.js"></script>

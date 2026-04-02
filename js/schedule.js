@@ -2,8 +2,8 @@ const responses = JSON.parse(localStorage.getItem("questionnaireResponses"));
 
 if ((!responses || responses.length === 0) && !isPreviewMode()) {
     alert("Complete questionnaire first.");
-    return;
     window.location.href = "/questionnaire.html";
+    return;
     }
 
 async function scheduleSession() {
@@ -37,8 +37,29 @@ async function scheduleSession() {
 
         const data = await res.json();
 
-        document.getElementById("message").innerText =
-            data.message || data.error;
+document.getElementById("message").innerText =
+    data.message || data.error;
+
+//Redirect if payment required
+if (data.error === "Payment required before scheduling") {
+    setTimeout(() => {
+        window.location.href = "/payment.html";
+    }, 1000);
+}
+
+// REDIRECT AFTER SUCCESS
+if (data.message) {
+    setTimeout(() => {
+        window.location.href = "/payment.html";
+    }, 1000);
+}
+
+        // REDIRECT AFTER SUCCESS
+        if (data.message) {
+        setTimeout(() => {
+        window.location.href = "/payment.html";
+        }, 1000); // slight delay so user sees message
+    }
 
     } catch (err) {
         document.getElementById("message").innerText = "Error scheduling session.";
