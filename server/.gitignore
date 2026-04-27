@@ -1,4 +1,4 @@
-node_modules
+node_modules/
 .env
 .env.local
 .env.development.local
@@ -9,3 +9,4 @@ yarn-debug.log
 yarn-error.log
 dist
 build
+package-lock.json
