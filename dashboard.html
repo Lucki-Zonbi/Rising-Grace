@@ -46,10 +46,29 @@
   <p>Status: <span id="readinessLevel">--</span></p>
 </div>
 
+<div id="calendlyScheduleSection" class="dashboard-card" style="display: none;">
+  <h2>Schedule Your Rising Grace Session</h2>
+
+  <p id="calendlyMessage">
+    Your registration is complete. Please choose an available session time below.
+  </p>
+
+  <div
+    id="calendlyInlineWidget"
+    style="min-width:320px;height:700px;">
+  </div>
+</div>
+
 </div>
 
 <div class="card preview-card">
     <h3>Admin Preview Mode</h3>
+
+    <div class="card">
+    <h3>Live Payment Testing</h3>
+    <p>Open the real payment page to test Stripe and card processing.</p>
+    <button onclick="window.open('/payment.html', '_blank')">Open Live Payment Test</button>
+</div>
 
     <div class="preview-grid">
         <button onclick="previewPage('../index.html')">Home</button>
@@ -57,8 +76,9 @@
         <button onclick="previewPage('../contact/contact.html')">Contact</button>
         <button onclick="previewPage('../auth/register.html')">Register</button>
         <button onclick="previewPage('../questionnaire.html')">Questionnaire</button>
-        <button onclick="previewPage('../schedule.html')">Schedule</button>
-    </div>
+        <button onclick="window.open('/schedule.html', '_blank')">Schedule</button>
+        <button onclick="window.open('/payment.html', '_blank')">Payment</button>
+      </div>
 
     <div><button class="full-flow-btn" onclick="startFullPreview()">Full User Flow</button>
     </div>
@@ -77,8 +97,9 @@
 
 <button id="logoutBtn">Logout</button>
 
+<script src="https://assets.calendly.com/assets/external/widget.js" async></script>
 <script src="js/ariez.js"></script>
-<script src="js/authGuard.js"></script>
+<script src="js/authguard.js"></script>
 <script src="js/script.js"></script>
 <script src="js/dashboard.js"></script>
 

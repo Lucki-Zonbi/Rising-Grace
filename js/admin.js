@@ -134,7 +134,10 @@ async function loadSessions() {
 
         <button onclick="cancelSession('${s._id}')">Cancel</button>
         <button onclick="rescheduleSession('${s._id}')">Reschedule</button>
-    </div>
+        <button onclick="loadClientSessionHistory('${s.userId?._id}')">
+    View Client File
+</button>
+        </div>
 `).join("");
 }
 
@@ -178,6 +181,70 @@ async function rescheduleSession(id) {
     loadSessions();
 }
 
+async function loadPayments() {
+    const token = localStorage.getItem("token");
+    const container = document.getElementById("paymentsList");
+
+    if (!container) return;
+
+    try {
+        const res = await fetch("/api/payment/all", {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        const payments = await res.json();
+
+        if (!Array.isArray(payments) || payments.length === 0) {
+            container.innerHTML = "<p>No payments found.</p>";
+            return;
+        }
+
+        container.innerHTML = payments.map(payment => `
+            <div class="card">
+                <p><strong>${payment.userId?.name || "Unknown User"}</strong></p>
+                <p>${payment.userId?.email || "No email available"}</p>
+                <p>Amount: $${((payment.amount || 0) / 100).toFixed(2)}</p>
+                <p>Status: ${payment.status}</p>
+                <p>Created: ${new Date(payment.createdAt).toLocaleString()}</p>
+                <p>Stripe Session: ${payment.stripeSessionId || "N/A"}</p>
+
+                ${payment.status === "paid" ? `
+                    <button onclick="refundPayment('${payment._id}')">Refund</button>
+                ` : ""}
+            </div>
+        `).join("");
+    } catch (err) {
+        console.error("Load payments error:", err);
+        container.innerHTML = "<p>Error loading payments.</p>";
+    }
+}
+
+async function refundPayment(id) {
+    const token = localStorage.getItem("token");
+
+    try {
+        const res = await fetch(`/api/payment/refund/${id}`, {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        const data = await res.json();
+        alert(data.message || data.error || "Refund processed");
+
+        loadPayments();
+    } catch (err) {
+        console.error("Refund error:", err);
+        alert("Refund failed");
+    }
+}
+
+if (document.getElementById("paymentsList")) {
+    loadPayments();
+}
 async function loadAnalytics() {
     const token = localStorage.getItem("token");
 
@@ -224,15 +291,53 @@ async function loadAnalytics() {
     }
 }
 
-async function refundPayment(id) {
+async function loadClientSessionHistory(userId) {
     const token = localStorage.getItem("token");
+    const container = document.getElementById("clientSessionHistory");
 
-    await fetch(`/api/payment/refund/${id}`, {
-        method: "POST",
-        headers: {
-            "Authorization": `Bearer ${token}`
+    if (!container || !userId) return;
+
+    try {
+        const res = await fetch(`/api/schedule/client-history/${userId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        const sessions = await res.json();
+
+        if (!Array.isArray(sessions) || sessions.length === 0) {
+            container.innerHTML = "<p>No sessions recorded for this client.</p>";
+            return;
         }
-    });
 
-    alert("Payment refunded");
+        container.innerHTML = sessions.map(session => `
+            <div class="card">
+                <p><strong>${session.date || "No date"} at ${session.time || "No time"}</strong></p>
+                <p>Status: ${session.status}</p>
+                <p>Source: ${session.source || "internal"}</p>
+                <p>Meeting Platform: ${session.meetingProvider || "Not recorded"}</p>
+                <p>
+                    Meeting Link:
+                    ${
+                        session.meetingLink
+                            ? `<a href="${session.meetingLink}" target="_blank">Open Session Link</a>`
+                            : "Not available"
+                    }
+                </p>
+                <p>
+                    Recording:
+                    ${
+                        session.recordingLink
+                            ? `<a href="${session.recordingLink}" target="_blank">Open Recording</a>`
+                            : "Not uploaded"
+                    }
+                </p>
+                <p>Created: ${new Date(session.createdAt).toLocaleString()}</p>
+            </div>
+        `).join("");
+    } catch (err) {
+        console.error("Client history error:", err);
+        container.innerHTML = "<p>Error loading client session history.</p>";
+    }
 }

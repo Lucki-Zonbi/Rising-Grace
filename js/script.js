@@ -327,18 +327,22 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         registerForm.addEventListener("submit", (e) => {
-            e.preventDefault();
-            localStorage.removeItem("registerData");
+    e.preventDefault();
 
-            registerForm.innerHTML = `
-                <h2>Account Created Successfully 🌸</h2>
-                <p>You may now log in.</p>
-                <button onclick="window.location.href='login.html'" class="submit-btn">
-                    Go To Login
-                </button>
-            `;
-        });
+    const completedAt = new Date().toISOString();
 
+    localStorage.removeItem("registerData");
+    localStorage.setItem("registrationComplete", "true");
+    localStorage.setItem("registrationCompletedAt", completedAt);
+
+    registerForm.innerHTML = `
+        <h2>Account Created Successfully 🌸</h2>
+        <p>Your registration is complete. After logging in, you will be able to schedule through Calendly.</p>
+        <button onclick="window.location.href='login.html'" class="submit-btn">
+            Go To Login
+        </button>
+    `;
+});
         showStep(currentStep);
     }
 

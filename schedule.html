@@ -1,10 +1,50 @@
-<h2>Schedule Session</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Schedule Session</title>
+    <link rel="stylesheet" href="/css/portal-pages.css" />
+</head>
+<body>
+    <div class="portal-wrapper">
+        <div class="portal-header">
+            <h2>Schedule Your Session</h2>
+            <p>Select a date and time to request your next Rising Grace session.</p>
+        </div>
 
-<input type="date" id="date">
-<input type="time" id="time">
+        <div class="portal-card">
+            <h3>Session Booking</h3>
 
-<button onclick="scheduleSession()">Book</button>
+            <div class="portal-grid">
+                <div class="portal-field">
+                    <label for="date">Select Date</label>
+                    <input type="date" id="date" />
+                </div>
 
-<p id="message"></p>
+                <div class="portal-field">
+                    <label for="time">Select Time</label>
+                    <input type="time" id="time" />
+                </div>
+            </div>
 
-<script src="js/schedule.js"></script>
+            <div class="portal-actions">
+                <button class="portal-btn portal-btn-primary" onclick="scheduleSession()">
+                    Book Session
+                </button>
+                <button class="portal-btn portal-btn-secondary" onclick="window.location.href='/dashboard.html'">
+                    Back to Dashboard
+                </button>
+            </div>
+
+            <p id="message" class="portal-message"></p>
+
+            <p class="portal-note">
+                Scheduling may require a completed questionnaire and payment before confirmation.
+            </p>
+        </div>
+    </div>
+
+    <script src="/js/schedule.js"></script>
+</body>
+</html>

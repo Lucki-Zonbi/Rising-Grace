@@ -1,67 +1,73 @@
 const responses = JSON.parse(localStorage.getItem("questionnaireResponses"));
 
-if ((!responses || responses.length === 0) && !isPreviewMode()) {
+function hasCompletedQuestionnaire() {
+    return responses && responses.length > 0;
+}
+
+// Guard on page load
+if (!hasCompletedQuestionnaire() && !isPreviewMode()) {
     alert("Complete questionnaire first.");
     window.location.href = "/questionnaire.html";
-    return;
-    }
+}
 
 async function scheduleSession() {
     const date = document.getElementById("date").value;
     const time = document.getElementById("time").value;
-
+    const messageEl = document.getElementById("message");
     const token = localStorage.getItem("token");
 
     if (!date || !time) {
-        document.getElementById("message").innerText = "Please select date and time.";
+        messageEl.innerText = "Please select date and time.";
         return;
     }
 
-    if (!questionnaireCompleted && !isPreviewMode()) {
-    alert("Complete questionnaire first");
-    return;
-}
+    if (!hasCompletedQuestionnaire() && !isPreviewMode()) {
+        alert("Complete questionnaire first.");
+        window.location.href = "/questionnaire.html";
+        return;
+    }
+
+    if (!token) {
+        messageEl.innerText = "You must be logged in to schedule a session.";
+        return;
+    }
 
     try {
+        messageEl.innerText = "Processing...";
+
         const res = await fetch("/api/schedule", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}` // ✅ REQUIRED
+                "Authorization": `Bearer ${token}`
             },
-            body: JSON.stringify({
-                date,
-                time
-            })
+            body: JSON.stringify({ date, time })
         });
 
         const data = await res.json();
 
-document.getElementById("message").innerText =
-    data.message || data.error;
+        messageEl.innerText = data.message || data.error || "Unable to process request.";
 
-//Redirect if payment required
-if (data.error === "Payment required before scheduling") {
-    setTimeout(() => {
-        window.location.href = "/payment.html";
-    }, 1000);
-}
+        if (data.error === "Payment required before scheduling") {
+            localStorage.setItem("pendingSession", JSON.stringify({ date, time }));
 
-// REDIRECT AFTER SUCCESS
-if (data.message) {
-    setTimeout(() => {
-        window.location.href = "/payment.html";
-    }, 1000);
-}
+            setTimeout(() => {
+                window.location.href = "/payment.html";
+            }, 1000);
 
-        // REDIRECT AFTER SUCCESS
+            return;
+        }
+
         if (data.message) {
-        setTimeout(() => {
-        window.location.href = "/payment.html";
-        }, 1000); // slight delay so user sees message
-    }
+            localStorage.removeItem("pendingSession");
+
+            setTimeout(() => {
+                window.location.href = "/dashboard.html";
+            }, 1000);
+        }
 
     } catch (err) {
-        document.getElementById("message").innerText = "Error scheduling session.";
+        console.error("Schedule error:", err);
+        messageEl.innerText = "Error scheduling session.";
     }
 }

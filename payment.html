@@ -1,25 +1,78 @@
-<h2>Payment</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Payment</title>
+    <link rel="stylesheet" href="/css/portal-pages.css" />
+</head>
+<body>
+    <div class="portal-wrapper">
+        <div class="portal-header">
+            <h2>Complete Your Payment</h2>
+            <p>Use card or Stripe checkout to unlock scheduling for your session.</p>
+        </div>
 
-<div class="card">
-  <h3>Billing Information</h3>
+        <div class="portal-card">
+            <h3>Billing Information</h3>
 
-  <input type="text" id="name" placeholder="Full Name" />
-  <input type="text" id="cardNumber" placeholder="Card Number" />
-  <input type="text" id="expiry" placeholder="MM/YY" />
-  <input type="text" id="cvv" placeholder="CVV" />
+            <div class="portal-field">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" placeholder="Full Name" />
+            </div>
 
-  <button onclick="payWithCard()">Pay with Card</button>
-</div>
+            <div class="portal-grid">
+                <div class="portal-field">
+                    <label for="cardNumber">Card Number</label>
+                    <input type="text" id="cardNumber" placeholder="Card Number" />
+                </div>
 
-<hr>
+                <div class="portal-field">
+                    <label for="expiry">Expiry</label>
+                    <input type="text" id="expiry" placeholder="MM/YY" />
+                </div>
+            </div>
 
-<div class="card">
-  <h3>Other Payment Options</h3>
+            <div class="portal-grid">
+                <div class="portal-field">
+                    <label for="cvv">CVV</label>
+                    <input type="text" id="cvv" placeholder="CVV" />
+                </div>
 
-  <button onclick="payWithStripe()">Pay with Stripe</button>
-  <button onclick="payWithPayPal()">Pay with PayPal</button>
-</div>
+                <div class="portal-field">
+                    <label for="zip">ZIP Code</label>
+                    <input type="text" id="zip" placeholder="ZIP Code" />
+                </div>
+            </div>
 
-<p id="paymentMessage"></p>
+            <div class="portal-actions">
+                <button class="portal-btn portal-btn-primary" onclick="payWithCard()">
+                    Pay with Card
+                </button>
+            </div>
+        </div>
 
-<script src="/js/payment.js"></script>
+        <hr class="portal-divider" />
+
+        <div class="portal-card">
+            <h3>Other Payment Options</h3>
+
+            <div class="portal-actions">
+                <button class="portal-btn portal-btn-primary" onclick="payWithStripe()">
+                    Pay with Stripe
+                </button>
+                <button class="portal-btn portal-btn-secondary" onclick="payWithPayPal()">
+                    Pay with PayPal
+                </button>
+                <button class="portal-btn portal-btn-secondary" onclick="window.location.href='/dashboard.html'">
+                    Back to Dashboard
+                </button>
+            </div>
+
+            <p id="paymentMessage" class="portal-message"></p>
+        </div>
+    </div>
+
+    <script src="/js/payment.js"></script>
+</body>
+</html>

@@ -1,10 +1,10 @@
+require("dotenv").config();
+
 const express = require("express");
 const mongoose = require("mongoose");
-const dotenv = require("dotenv");
 const helmet = require("helmet");
 const cors = require("cors");
-
-dotenv.config();
+const path = require("path");
 
 const app = express();
 
@@ -13,21 +13,30 @@ const paymentRoutes = require("./routes/payment");
 const analyticsRoutes = require("./routes/analytics");
 const authRoutes = require("./routes/authRoutes");
 const adminRoutes = require("./routes/adminRoutes");
-const security = require("./routes/security"); // this matches your actual file
+const securityRoutes = require("./routes/security");
 const questionnaireRoutes = require("./routes/Questionnaire2");
 const scheduleRoutes = require("./routes/schedule");
 
 // Security middleware
 app.use(helmet());
 app.use(cors());
+
+// Stripe webhook raw body must come BEFORE express.json()
+app.use("/api/payment/webhook", express.raw({ type: "application/json" }));
+
+// Normal body parsers
 app.use(express.json({ limit: "10kb" }));
+app.use(express.urlencoded({ extended: true }));
+
+// Static files
+app.use(express.static(path.join(__dirname, "../public")));
 
 // API routes
 app.use("/api/payment", paymentRoutes);
 app.use("/api/analytics", analyticsRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
-app.use("/api/security", security); // correctly mounted
+app.use("/api/security", securityRoutes);
 app.use("/api/questionnaire", questionnaireRoutes);
 app.use("/api/schedule", scheduleRoutes);
 
@@ -42,8 +51,9 @@ mongoose
   .then(() => {
     console.log("MongoDB Connected Securely");
 
-    app.listen(process.env.PORT, () => {
-      console.log(`Server running on port ${process.env.PORT}`);
+    const port = process.env.PORT || 3000;
+    app.listen(port, () => {
+      console.log(`Server running on port ${port}`);
     });
   })
   .catch((err) => {

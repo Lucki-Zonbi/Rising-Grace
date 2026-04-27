@@ -274,3 +274,51 @@ async function loadAriezLive() {
 if (document.getElementById("ariezMessage")) {
     loadAriezLive();
 }
+
+const CALENDLY_URL = "https://calendly.com/YOUR-CALENDLY-USERNAME/YOUR-EVENT-TYPE";
+
+document.addEventListener("DOMContentLoaded", () => {
+    loadCalendlyPromptAfterRegistration();
+
+    if (typeof AriezCalendlyMonitor !== "undefined") {
+        AriezCalendlyMonitor.checkCalendlyBookingLoad();
+    }
+});
+
+function loadCalendlyPromptAfterRegistration() {
+    const calendlySection = document.getElementById("calendlyScheduleSection");
+    const calendlyWidget = document.getElementById("calendlyInlineWidget");
+    const calendlyMessage = document.getElementById("calendlyMessage");
+
+    if (!calendlySection || !calendlyWidget) return;
+
+    const registrationComplete =
+        localStorage.getItem("registrationComplete") === "true";
+
+    if (!registrationComplete) {
+        calendlySection.style.display = "none";
+        return;
+    }
+
+    calendlySection.style.display = "block";
+
+    if (calendlyMessage) {
+        calendlyMessage.innerText =
+            "Your registration is complete. Please choose an available session time below.";
+    }
+
+    if (window.Calendly) {
+        Calendly.initInlineWidget({
+            url: CALENDLY_URL,
+            parentElement: calendlyWidget,
+            prefill: {},
+            utm: {
+                utmSource: "Rising Grace Dashboard",
+                utmMedium: "Client Portal",
+                utmCampaign: "Post Registration Scheduling"
+            }
+        });
+    } else {
+        setTimeout(loadCalendlyPromptAfterRegistration, 500);
+    }
+}
