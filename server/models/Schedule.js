@@ -3,14 +3,13 @@ const mongoose = require("mongoose");
 const ScheduleSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-        default: null
+        ref: "User"
     },
     date: String,
     time: String,
     status: {
         type: String,
-        enum: ["booked", "cancelled", "pending_payment"],
+        enum: ["booked", "cancelled", "completed", "pending_payment"],
         default: "booked"
     },
     source: {
@@ -18,47 +17,31 @@ const ScheduleSchema = new mongoose.Schema({
         enum: ["internal", "calendly"],
         default: "internal"
     },
-    calendlyEventUri: {
+    meetingProvider: {
+        type: String,
+        enum: ["zoom", "google_meet", "microsoft_teams", "calendly", "manual", null],
+        default: null
+    },
+    meetingLink: {
         type: String,
         default: null
     },
-    calendlyInviteeUri: {
+    recordingLink: {
         type: String,
         default: null
     },
-    inviteeEmail: {
+    sessionNotes: {
         type: String,
-        default: null
+        default: ""
     },
-    inviteeName: {
-        type: String,
+    completedAt: {
+        type: Date,
         default: null
     },
     createdAt: {
         type: Date,
         default: Date.now
-    },
-    meetingProvider: {
-    type: String,
-    enum: ["zoom", "google_meet", "microsoft_teams", "calendly", "manual", null],
-    default: null
-},
-meetingLink: {
-    type: String,
-    default: null
-},
-sessionNotes: {
-    type: String,
-    default: ""
-},
-recordingLink: {
-    type: String,
-    default: null
-},
-completedAt: {
-    type: Date,
-    default: null
-}
+    }
 });
 
 module.exports = mongoose.model("Schedule", ScheduleSchema);

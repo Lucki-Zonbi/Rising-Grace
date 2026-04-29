@@ -130,14 +130,37 @@ async function loadSessions() {
     container.innerHTML = sessions.map(s => `
     <div class="card">
         <p><strong>${s.userId?.name || "User"}</strong></p>
-        <p>${s.date} at ${s.time}</p>
+        <p>${s.userId?.email || "No email available"}</p>
+        <p>${s.date || "No date"} at ${s.time || "No time"}</p>
+        <p>Status: ${s.status || "booked"}</p>
+        <p>Meeting Platform: ${s.meetingProvider || "Not recorded"}</p>
+        <p>
+            Meeting Link:
+            ${
+                s.meetingLink
+                    ? `<a href="${s.meetingLink}" target="_blank">Open Session Link</a>`
+                    : "Not available"
+            }
+        </p>
+        <p>
+            Recording:
+            ${
+                s.recordingLink
+                    ? `<a href="${s.recordingLink}" target="_blank">Open Recording</a>`
+                    : "Not uploaded"
+            }
+        </p>
 
         <button onclick="cancelSession('${s._id}')">Cancel</button>
         <button onclick="rescheduleSession('${s._id}')">Reschedule</button>
-        <button onclick="loadClientSessionHistory('${s.userId?._id}')">
-    View Client File
-</button>
-        </div>
+        <button onclick="completeSession('${s._id}')">Complete + Add Recording</button>
+
+        ${
+            s.userId?._id
+                ? `<button onclick="loadClientSessionHistory('${s.userId._id}')">View Client File</button>`
+                : ""
+        }
+    </div>
 `).join("");
 }
 
@@ -291,6 +314,45 @@ async function loadAnalytics() {
     }
 }
 
+async function completeSession(sessionId) {
+    const token = localStorage.getItem("token");
+
+    const recordingLink = prompt("Paste the recording link for this session:");
+
+    if (recordingLink === null) {
+        return;
+    }
+
+    const sessionNotes = prompt("Add session notes for the client file:");
+
+    try {
+        const res = await fetch(`/api/schedule/${sessionId}/complete`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                recordingLink,
+                sessionNotes: sessionNotes || ""
+            })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            alert(data.error || "Unable to complete session");
+            return;
+        }
+
+        alert(data.message || "Session completed");
+        loadSessions();
+    } catch (err) {
+        console.error("Complete session error:", err);
+        alert("Unable to complete session");
+    }
+}
+
 async function loadClientSessionHistory(userId) {
     const token = localStorage.getItem("token");
     const container = document.getElementById("clientSessionHistory");
@@ -300,7 +362,7 @@ async function loadClientSessionHistory(userId) {
     try {
         const res = await fetch(`/api/schedule/client-history/${userId}`, {
             headers: {
-                Authorization: `Bearer ${token}`
+                "Authorization": `Bearer ${token}`
             }
         });
 
@@ -333,6 +395,12 @@ async function loadClientSessionHistory(userId) {
                             : "Not uploaded"
                     }
                 </p>
+                <p>Notes: ${session.sessionNotes || "No notes added"}</p>
+                <p>Completed: ${
+                    session.completedAt
+                        ? new Date(session.completedAt).toLocaleString()
+                        : "Not completed"
+                }</p>
                 <p>Created: ${new Date(session.createdAt).toLocaleString()}</p>
             </div>
         `).join("");

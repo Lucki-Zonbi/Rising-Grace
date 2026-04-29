@@ -263,6 +263,28 @@ router.get("/all", protect, async (req, res) => {
     }
 });
 
+// Admin: chronological client session history
+router.get("/client-history/:userId", protect, async (req, res) => {
+    try {
+        if (req.user.role !== "admin") {
+            return res.status(403).json({ error: "Admin only" });
+        }
+
+        const sessions = await Schedule.find({
+            userId: req.params.userId
+        }).sort({
+            date: 1,
+            time: 1,
+            createdAt: 1
+        });
+
+        res.json(sessions);
+    } catch (err) {
+        console.error("Client session history error:", err);
+        res.status(500).json({ error: "Unable to load client history" });
+    }
+});
+
 // Admin: cancel session
 router.delete("/:id", protect, async (req, res) => {
     try {
@@ -281,6 +303,59 @@ router.delete("/:id", protect, async (req, res) => {
     } catch (err) {
         console.error("Cancel session error:", err);
         res.status(500).json({ error: "Server error" });
+    }
+});
+
+// Admin: complete session and attach recording
+router.put("/:id/complete", protect, async (req, res) => {
+    try {
+        if (req.user.role !== "admin") {
+            return res.status(403).json({ error: "Admin only" });
+        }
+
+        const { recordingLink, sessionNotes } = req.body;
+
+        const session = await Schedule.findById(req.params.id).populate("userId", "name email");
+
+        if (!session) {
+            return res.status(404).json({ error: "Session not found" });
+        }
+
+        session.status = "completed";
+        session.recordingLink = recordingLink || session.recordingLink;
+        session.sessionNotes = sessionNotes || session.sessionNotes;
+        session.completedAt = new Date();
+
+        await session.save();
+
+        try {
+            const SecurityEvent = require("../models/SecurityEvent");
+
+            await SecurityEvent.create({
+                event: "SESSION_COMPLETED_AND_RECORDED",
+                user: session.userId?.email || "Unknown client",
+                details: {
+                    sessionId: session._id,
+                    clientName: session.userId?.name || "Unknown client",
+                    date: session.date,
+                    time: session.time,
+                    recordingLink: session.recordingLink || null,
+                    sessionNotes: session.sessionNotes || "",
+                    completedAt: session.completedAt
+                },
+                ip: req.ip
+            });
+        } catch (logErr) {
+            console.error("Ariez session completion log error:", logErr);
+        }
+
+        res.json({
+            message: "Session marked completed and recording saved",
+            session
+        });
+    } catch (err) {
+        console.error("Complete session error:", err);
+        res.status(500).json({ error: "Unable to complete session" });
     }
 });
 
@@ -330,5 +405,7 @@ router.get("/client-history/:userId", protect, async (req, res) => {
         res.status(500).json({ error: "Unable to load client history" });
     }
 });
+
+
 
 module.exports = router;
