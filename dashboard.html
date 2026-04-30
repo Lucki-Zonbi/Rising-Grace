@@ -9,7 +9,7 @@
 
 </head>
 
-<body onload="checkAuth(); loadDashboard(); loadSecurityEvents(); startAriezMonitor();">
+<body onload="checkAuth(); loadDashboard(); loadSecurityEvents(); startAriezMonitor(); checkPendingPostSessionSurvey();">
 
  <div id="ariezAlertBanner" class="ariez-banner hidden">
 ⚠ ARIEZ SECURITY ALERT DETECTED
@@ -44,6 +44,16 @@
   <h2>Your Readiness</h2>
   <p>Score: <span id="readinessScore">--</span></p>
   <p>Status: <span id="readinessLevel">--</span></p>
+</div>
+
+<div id="postSessionSurveyCard" class="dashboard-card" style="display: none;">
+  <h2>Post-Session Survey Required</h2>
+  <p>
+    Please complete your last session survey before scheduling another session.
+  </p>
+  <button onclick="window.location.href='/post-session-survey.html'">
+    Complete Survey
+  </button>
 </div>
 
 <div id="calendlyScheduleSection" class="dashboard-card" style="display: none;">

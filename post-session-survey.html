@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Post-Session Survey</title>
+    <link rel="stylesheet" href="/css/portal-pages.css" />
+</head>
+<body>
+    <div class="portal-wrapper">
+        <div class="portal-header">
+            <h2>Post-Session Survey</h2>
+            <p>Please complete this short survey before scheduling your next session.</p>
+        </div>
+
+        <div class="portal-card">
+            <h3>Teresa’s Last Session Summary</h3>
+            <p id="sessionSummary">Loading session summary...</p>
+        </div>
+
+        <div class="portal-card">
+            <h3>About the Session</h3>
+
+            <div class="portal-field">
+                <label>Was the session well-organized/structured?</label>
+                <div class="portal-actions">
+                    <button type="button" onclick="setOrganized(true)">Yes</button>
+                    <button type="button" onclick="setOrganized(false)">No</button>
+                </div>
+                <p id="organizedChoice"></p>
+            </div>
+
+            <div class="portal-field">
+                <label>Was the session duration appropriate?</label>
+                <div class="portal-actions">
+                    <button type="button" onclick="setDuration('Too short')">Too short</button>
+                    <button type="button" onclick="setDuration('Just right')">Just right</button>
+                    <button type="button" onclick="setDuration('Too long')">Too long</button>
+                </div>
+                <p id="durationChoice"></p>
+            </div>
+
+            <div class="portal-field">
+                <label>How comfortable did you feel during the session?</label>
+                <div id="comfortScale" class="portal-actions"></div>
+                <p id="comfortChoice"></p>
+            </div>
+
+            <div class="portal-field">
+                <label for="mostHelpful">What was most helpful or valuable about the session?</label>
+                <textarea id="mostHelpful" rows="4"></textarea>
+            </div>
+
+            <div class="portal-field">
+                <label for="needsImprovement">What, if anything, was unhelpful or could be improved?</label>
+                <textarea id="needsImprovement" rows="4"></textarea>
+            </div>
+
+            <div class="portal-actions">
+                <button class="portal-btn portal-btn-primary" onclick="submitPostSessionSurvey()">
+                    Submit Survey
+                </button>
+
+                <button class="portal-btn portal-btn-secondary" onclick="window.location.href='/dashboard.html'">
+                    Back to Dashboard
+                </button>
+            </div>
+
+            <p id="surveyMessage" class="portal-message"></p>
+        </div>
+    </div>
+
+    <script src="/js/post-session-survey.js"></script>
+</body>
+</html>

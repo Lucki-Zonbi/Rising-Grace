@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
+const Feedback = require("../models/Feedback");
 const Schedule = require("../models/Schedule");
 const Questionnaire = require("../models/Questionnaire");
 const Payment = require("../models/Payment");
@@ -42,10 +43,28 @@ function detectMeetingProvider(linkOrLocation = "") {
 router.post("/", protect, async (req, res) => {
     try {
         const userId = req.user._id;
+
         const { date, time } = req.body;
 
         if (!date || !time) {
             return res.status(400).json({ error: "Date and time are required" });
+        }
+
+        const lastCompletedSession = await Schedule.findOne({
+        userId,
+        status: "completed"}).sort({ completedAt: -1, createdAt: -1 });
+
+        if (lastCompletedSession) {
+        const feedback = await Feedback.findOne({
+        userId,
+        sessionId: lastCompletedSession._id
+        });
+
+        if (!feedback) {
+        return res.status(403).json({
+            error: "Post-session survey required before scheduling another session",
+            redirectTo: "/post-session-survey.html"});
+            }
         }
 
         const questionnaire = await Questionnaire.findOne({ userId });

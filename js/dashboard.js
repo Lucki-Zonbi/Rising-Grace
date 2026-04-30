@@ -322,3 +322,28 @@ function loadCalendlyPromptAfterRegistration() {
         setTimeout(loadCalendlyPromptAfterRegistration, 500);
     }
 }
+
+async function checkPendingPostSessionSurvey() {
+    const token = localStorage.getItem("token");
+    const surveyCard = document.getElementById("postSessionSurveyCard");
+
+    if (!token || !surveyCard) return;
+
+    try {
+        const res = await fetch("/api/feedback/pending", {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        const data = await res.json();
+
+        if (data.hasPendingSurvey) {
+            surveyCard.style.display = "block";
+        } else {
+            surveyCard.style.display = "none";
+        }
+    } catch (err) {
+        console.error("Pending survey check error:", err);
+    }
+}

@@ -48,6 +48,16 @@ async function scheduleSession() {
 
         messageEl.innerText = data.message || data.error || "Unable to process request.";
 
+        if (data.error === "Post-session survey required before scheduling another session") {
+        alert("You must complete your post-session survey before booking another session.");
+
+        setTimeout(() => {
+        window.location.href = data.redirectTo || "/post-session-survey.html";
+        }, 1000);
+
+        return;
+        }
+
         if (data.error === "Payment required before scheduling") {
             localStorage.setItem("pendingSession", JSON.stringify({ date, time }));
 
