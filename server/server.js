@@ -17,6 +17,7 @@ const securityRoutes = require("./routes/security");
 const questionnaireRoutes = require("./routes/Questionnaire2");
 const scheduleRoutes = require("./routes/schedule");
 const feedbackRoutes = require("./routes/feedback");
+const reportsRoutes = require("./routes/reports");
 
 // Security middleware
 app.use(helmet());
@@ -41,6 +42,7 @@ app.use("/api/security", securityRoutes);
 app.use("/api/questionnaire", questionnaireRoutes);
 app.use("/api/schedule", scheduleRoutes);
 app.use("/api/feedback", feedbackRoutes);
+app.use("/api/reports", reportsRoutes);
 
 // Basic route
 app.get("/", (req, res) => {

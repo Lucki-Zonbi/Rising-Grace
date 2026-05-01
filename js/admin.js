@@ -409,3 +409,23 @@ async function loadClientSessionHistory(userId) {
         container.innerHTML = "<p>Error loading client session history.</p>";
     }
 }
+
+async function exportSessionsToSheets() {
+    const token = localStorage.getItem("token");
+    const messageEl = document.getElementById("reportsMessage");
+
+    try {
+        const res = await fetch("/api/reports/export/sessions", {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        const data = await res.json();
+        messageEl.innerText = data.message || data.error;
+    } catch (err) {
+        console.error("Export sessions error:", err);
+        messageEl.innerText = "Unable to export sessions.";
+    }
+}
